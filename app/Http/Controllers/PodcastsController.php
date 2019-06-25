@@ -34,18 +34,15 @@ class PodcastsController extends Controller
         $user = Auth::user();
 
         $podcast_items = DB::table('podcast_items')
-            ->where('user_id', '=', $user->id)
             ->where('is_mark_as_read', '!=', 1)
             ->orderBy('published_at', 'desc')->paginate(15);
 
         $podcasts = DB::table('podcasts')
-            ->where('user_id', '=', $user->id)
             ->get();
 
         $data = array(
             'podcasts'          => $podcasts,
             'podcast_items'     => $podcast_items,
-            'user'              => $user,
         );
 
         return view('podcasts.list', $data);
@@ -57,12 +54,10 @@ class PodcastsController extends Controller
         $user = Auth::user();
 
         $podcast_items = DB::table('podcast_items')
-            ->where('user_id', '=', $user->id)
             ->where('is_mark_as_read', '!=', 1)
             ->orderBy('published_at', 'desc')->paginate(15);
 
         $podcasts = DB::table('podcasts')
-            ->where('user_id', '=', $user->id)
             ->get();
 
         $data = array(
@@ -84,7 +79,6 @@ class PodcastsController extends Controller
         $user = Auth::user();
 
         $podcasts = DB::table('podcasts')
-            ->where('user_id', '=', $user->id)
             ->get();
 
         $data = array(
@@ -102,7 +96,6 @@ class PodcastsController extends Controller
      */
     public function favorites() {
         $podcastItems = DB::table('podcast_items')
-            ->where('user_id', '=', Auth::user()->id)
             ->where('is_mark_as_favorite', '!=', 0)
             ->orderBy('published_at', 'desc')->paginate(15);
 
@@ -158,7 +151,6 @@ class PodcastsController extends Controller
                         'machine_name' => $podcastMachineName,
                         'feed_url' => $request->feed_url,
                         'feed_thumbnail_location' => 'images/' . $podcastMachineName . '.png',
-                        'user_id' => $user->id,
                         'web_url' => $feed->get_link(),
                     ]);
 
@@ -167,7 +159,6 @@ class PodcastsController extends Controller
                             'podcast_id' => DB::table('podcasts')
                                 ->select('id', 'machine_name')
                                 ->where('machine_name', '=', $podcastMachineName)->first()->id,
-                            'user_id' => $user->id,
                             'url' => $item->get_permalink(),
                             'audio_url' => $item->get_enclosure()->get_link(),
                             'title' => $item->get_title(),
@@ -231,4 +222,12 @@ class PodcastsController extends Controller
 
     }
 
+    /**
+     * Return a view to manage settings
+     * @return view
+     */
+    public function indextwo()
+    {
+        return view('podcasts.index');
+    }
 }

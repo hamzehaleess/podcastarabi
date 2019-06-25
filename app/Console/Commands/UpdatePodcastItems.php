@@ -41,13 +41,13 @@ class UpdatePodcastItems extends Command {
     public function handle() {
 
         $uniquePodcasts = DB::table('podcasts')
-            ->select('id', 'feed_url', 'machine_name')
+            ->select('id', 'feed_url', 'name')
             ->groupBy('id')->get();
 
         foreach ($uniquePodcasts as $podcast) {
             $usersSubscribedToThisPodcast = DB::table('podcasts')
                 ->select('user_id', 'id as podcast_id')
-                ->where('machine_name', '=', $podcast->machine_name)
+                ->where('name', '=', $podcast->name)
                 ->get();
 
             $items = Feeds::make($podcast->feed_url)->get_items();
